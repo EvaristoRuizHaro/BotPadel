@@ -136,12 +136,13 @@ class BaseDatos:
             (producto_id,),
         ).fetchone()
         ultimo = self.con.execute(
-            "SELECT disponible FROM precios WHERE producto_id = ? ORDER BY fecha DESC, id DESC "
-            "LIMIT 1",
+            "SELECT precio_cent, disponible FROM precios WHERE producto_id = ? "
+            "ORDER BY fecha DESC, id DESC LIMIT 1",
             (producto_id,),
         ).fetchone()
         return EstadoPrevio(
             minimo_historico=de_cent(agg["minimo"]),
+            ultimo_precio=None if ultimo is None else de_cent(ultimo["precio_cent"]),
             ultimo_disponible=None if ultimo is None else bool(ultimo["disponible"]),
             num_observaciones=int(agg["n"]),
         )

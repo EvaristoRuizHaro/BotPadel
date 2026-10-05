@@ -6,6 +6,7 @@ filtros:
   marcas: [Bullpadel, Nox, Adidas, Siux, Babolat, Head]   # vacío = todas
   precio_max: 200
   descuento_min_pct: 30                   # regla "descuento alto" (precio tachado)
+  bajada_min_pct: 5                       # regla "ha bajado desde la última revisión"
   bajada_historica_min_pct: 10            # regla "bajada real" frente al mínimo propio
   diferencia_min_eur_entre_tiendas: 15    # regla "mejor precio entre tiendas" (mismo EAN)
 
@@ -15,7 +16,7 @@ seguimiento:            # productos concretos que quiero vigilar (ignoran los fi
 
 notificaciones:
   telegram_chat_id: ${TELEGRAM_CHAT_ID}
-  resumen_diario: true
+  resumen_diario: false   # los avisos llegan uno a uno en cada revisión
 
 scraping:
   user_agent: "PadelOfertasBot/0.1 (+mailto:ruizristo@gmail.com)"
@@ -23,6 +24,7 @@ scraping:
   timeout_segundos: 20
   ruta_db: data/padel.db
   max_ejecuciones_vacias: 3    # aviso si una tienda devuelve 0 productos N veces seguidas
+  max_avisos_por_ejecucion: 40 # el resto se envía en la siguiente revisión
 
 # Fase 1: verificar plataforma de cada tienda (python -m padel_bot.investigar)
 # y cambiar "adaptador: pendiente" + "activa: true" cuando esté comprobada.

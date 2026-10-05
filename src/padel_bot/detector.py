@@ -46,6 +46,16 @@ def evaluar(
         if p.precio <= umbral:
             motivos.append(Motivo.BAJADA_HISTORICA)
 
+    # 1b) Ha bajado respecto a la última vez que lo vimos (cambio de precio entre revisiones)
+    ultimo = previo.ultimo_precio
+    if (
+        p.disponible
+        and ultimo is not None
+        and Motivo.BAJADA_HISTORICA not in motivos
+        and p.precio <= ultimo * (1 - Decimal(str(filtros.bajada_min_pct)) / 100)
+    ):
+        motivos.append(Motivo.BAJADA_PRECIO)
+
     # 2) Descuento alto sobre el precio tachado. Si ya hay histórico y el precio actual
     #    está por encima del mínimo visto, el tachado probablemente está inflado: se ignora.
     if (

@@ -80,3 +80,23 @@ def test_formatear_precio() -> None:
     assert formatear_precio(Decimal("189.95")) == "189,95 €"
     assert formatear_precio(Decimal("215")) == "215 €"
     assert formatear_precio(Decimal("1234.5")) == "1.234,50 €"
+
+
+def test_primera_ejecucion_y_luego_cambios_de_precio(db: BaseDatos, config: Config) -> None:
+    # 1ª ejecución: lo que ya está muy rebajado llega como oferta
+    rebajada = producto(precio=Decimal(150), precio_original=Decimal(230))
+    normal = producto(id_externo="2", ean=None, precio=Decimal(200))
+    ofertas = procesar_productos([rebajada, normal], db, config, fecha(1))
+    assert [o.producto.id_externo for o in ofertas] == ["1"]
+    db.registrar_aviso(ofertas[0], fecha(1))
+
+    # 2ª revisión: nada cambia → silencio
+    assert procesar_productos([rebajada, normal], db, config, fecha(2)) == []
+
+    # 3ª revisión: la "normal" baja un 6 % → aviso de cambio de precio
+    ofertas = procesar_productos(
+        [rebajada, normal.model_copy(update={"precio": Decimal(188)})], db, config, fecha(3)
+    )
+    assert len(ofertas) == 1
+    assert ofertas[0].motivos == [Motivo.BAJADA_PRECIO]
+    assert "⬇️ Ha bajado desde la última revisión (antes 200 €)" in formatear_oferta(ofertas[0])

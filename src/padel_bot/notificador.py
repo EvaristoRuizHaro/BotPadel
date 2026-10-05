@@ -39,6 +39,9 @@ def formatear_oferta(oferta: Oferta) -> str:
     lineas = [cabecera]
     if Motivo.BAJADA_HISTORICA in oferta.motivos and oferta.minimo_previo is not None:
         lineas.append(f"📉 Mínimo histórico (antes {formatear_precio(oferta.minimo_previo)})")
+    if Motivo.BAJADA_PRECIO in oferta.motivos and oferta.precio_anterior is not None:
+        antes = formatear_precio(oferta.precio_anterior)
+        lineas.append(f"⬇️ Ha bajado desde la última revisión (antes {antes})")
     if Motivo.MEJOR_PRECIO in oferta.motivos and oferta.siguiente_precio_otra_tienda:
         sig = formatear_precio(oferta.siguiente_precio_otra_tienda)
         lineas.append(f"🏆 Más barato que en otras tiendas (siguiente: {sig})")

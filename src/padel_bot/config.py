@@ -21,6 +21,7 @@ class Filtros(BaseModel):
     marcas: list[str] = []
     precio_max: Decimal | None = None
     descuento_min_pct: float = 30
+    bajada_min_pct: float = 5
     bajada_historica_min_pct: float = 10
     diferencia_min_eur_entre_tiendas: Decimal = Decimal(15)
 
@@ -42,6 +43,7 @@ class Scraping(BaseModel):
     timeout_segundos: float = 20
     ruta_db: str = "data/padel.db"
     max_ejecuciones_vacias: int = 3
+    max_avisos_por_ejecucion: int = 40
 
 
 class ConfigTienda(BaseModel):

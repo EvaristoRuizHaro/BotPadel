@@ -26,6 +26,7 @@ class ProductoNormalizado(BaseModel):
 
 class Motivo(StrEnum):
     BAJADA_HISTORICA = "bajada_historica"
+    BAJADA_PRECIO = "bajada_precio"
     DESCUENTO_ALTO = "descuento_alto"
     MEJOR_PRECIO = "mejor_precio"
     VUELVE_STOCK = "vuelve_stock"
@@ -35,6 +36,7 @@ class EstadoPrevio(BaseModel):
     """Lo que sabemos de un producto ANTES de la observación actual."""
 
     minimo_historico: Decimal | None = None
+    ultimo_precio: Decimal | None = None
     ultimo_disponible: bool | None = None
     num_observaciones: int = 0
 
@@ -44,6 +46,7 @@ class Oferta(BaseModel):
     producto: ProductoNormalizado
     motivos: list[Motivo]
     minimo_previo: Decimal | None = None
+    precio_anterior: Decimal | None = None
     siguiente_precio_otra_tienda: Decimal | None = None
     nombre_tienda: str | None = None
     descuento_pct: float = Field(default=0.0, description="Descuento frente a la referencia")
