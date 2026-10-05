@@ -28,21 +28,24 @@ scraping:
 # y cambiar "adaptador: pendiente" + "activa: true" cuando esté comprobada.
 # Adaptadores: shopify | woocommerce | jsonld | html | playwright | pendiente
 tiendas:
-  - {nombre: padelnuestro, nombre_visible: Padel Nuestro, adaptador: pendiente, activa: false, url_base: "https://www.padelnuestro.com"}
-  - {nombre: zonadepadel, nombre_visible: Zona de Padel, adaptador: pendiente, activa: false, url_base: "https://www.zonadepadel.es"}
-  - {nombre: time2padel, nombre_visible: Time2Padel, adaptador: pendiente, activa: false, url_base: "https://www.time2padel.com/es"}
-  - {nombre: padelmarket, nombre_visible: Padel Market, adaptador: pendiente, activa: false, url_base: "https://www.padelmarket.com"}
-  - {nombre: padelproshop, nombre_visible: Padel Proshop, adaptador: pendiente, activa: false, url_base: "https://www.padelproshop.com"}
-  - {nombre: streetpadel, nombre_visible: StreetPadel, adaptador: pendiente, activa: false, url_base: "https://www.streetpadel.com"}
-  - {nombre: padeliberico, nombre_visible: Pádel Ibérico, adaptador: pendiente, activa: false, url_base: "https://www.padeliberico.es"}
-  - {nombre: m1padel, nombre_visible: M1 Padel, adaptador: pendiente, activa: false, url_base: "https://www.m1padel.com"}
-  - {nombre: stockpadel, nombre_visible: Stock Padel, adaptador: pendiente, activa: false, url_base: "https://www.stockpadel.com/es"}
-  - {nombre: areapadel, nombre_visible: Area Padel, adaptador: pendiente, activa: false, url_base: "https://areapadel.com"}
-  - {nombre: keepadel, nombre_visible: Keepadel, adaptador: pendiente, activa: false, url_base: "https://keepadel.com/es"}
-  - {nombre: decathlon, nombre_visible: Decathlon, adaptador: pendiente, activa: false, url_base: "https://www.decathlon.es"}
-  - {nombre: elcorteingles, nombre_visible: El Corte Inglés, adaptador: pendiente, activa: false, url_base: "https://www.elcorteingles.es"}
-  - {nombre: bullpadel, nombre_visible: Bullpadel, adaptador: pendiente, activa: false, url_base: "https://www.bullpadel.com"}
-  - {nombre: nox, nombre_visible: NOX, adaptador: pendiente, activa: false, url_base: "https://www.noxsport.com"}
+  # --- Activas (Shopify: /products.json) ---
+  - {nombre: padelmarket, nombre_visible: Padel Market, adaptador: shopify, activa: true, url_base: "https://padelmarket.com"}
+  - {nombre: padelproshop, nombre_visible: Padel Proshop, adaptador: shopify, activa: true, url_base: "https://padelproshop.com"}
+  - {nombre: streetpadel, nombre_visible: StreetPadel, adaptador: shopify, activa: true, url_base: "https://www.streetpadel.com"}
+  - {nombre: nox, nombre_visible: NOX, adaptador: shopify, activa: true, url_base: "https://noxsport.com"}
+
+  # --- Magento / PrestaShop: candidatas a adaptador jsonld (fase 4) ---
+  - {nombre: padelnuestro, nombre_visible: Padel Nuestro, adaptador: pendiente, activa: false, url_base: "https://www.padelnuestro.com", sitemap: "https://www.padelnuestro.com/media/sitemap_product.xml"}  # magento
+  - {nombre: zonadepadel, nombre_visible: Zona de Padel, adaptador: pendiente, activa: false, url_base: "https://www.zonadepadel.es"}  # prestashop
+  - {nombre: time2padel, nombre_visible: Time2Padel, adaptador: pendiente, activa: false, url_base: "https://www.time2padel.com/es"}  # 403 antibot: desactivada
+  - {nombre: padeliberico, nombre_visible: Pádel Ibérico, adaptador: pendiente, activa: false, url_base: "https://www.padeliberico.es"}  # 403 antibot: desactivada
+  - {nombre: m1padel, nombre_visible: M1 Padel, adaptador: pendiente, activa: false, url_base: "https://www.m1padel.com"}  # prestashop
+  - {nombre: stockpadel, nombre_visible: Stock Padel, adaptador: pendiente, activa: false, url_base: "https://www.stockpadel.com/es"}  # prestashop
+  - {nombre: areapadel, nombre_visible: Area Padel, adaptador: pendiente, activa: false, url_base: "https://areapadel.com"}  # prestashop
+  - {nombre: keepadel, nombre_visible: Keepadel, adaptador: pendiente, activa: false, url_base: "https://keepadel.com/es"}  # prestashop
+  - {nombre: decathlon, nombre_visible: Decathlon, adaptador: pendiente, activa: false, url_base: "https://www.decathlon.es"}  # 403 antibot: desactivada
+  - {nombre: elcorteingles, nombre_visible: El Corte Inglés, adaptador: pendiente, activa: false, url_base: "https://www.elcorteingles.es"}  # 403 antibot: desactivada
+  - {nombre: bullpadel, nombre_visible: Bullpadel, adaptador: pendiente, activa: false, url_base: "https://www.bullpadel.com"}  # 403 antibot: desactivada
   # Pendientes de URL: Padel Directo, Siux, Adidas Padel, Head Padel, Babolat Padel
 
   # Ejemplos de configuración por tipo de adaptador:

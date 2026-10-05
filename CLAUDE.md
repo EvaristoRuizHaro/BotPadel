@@ -23,22 +23,22 @@ El valor no está en "listar productos rebajados" (todas las tiendas tienen 500 
 
 | # | Tienda | URL | Tipo | Plataforma |
 |---|--------|-----|------|------------|
-| 1 | Padel Nuestro | https://www.padelnuestro.com | Tienda especializada | ? |
-| 2 | Zona de Padel | https://www.zonadepadel.es | Tienda especializada | ? |
-| 3 | Time2Padel | https://www.time2padel.com/es/ | Tienda especializada | ? |
-| 4 | Padel Market | https://www.padelmarket.com | Tienda especializada | ? |
-| 5 | Padel Proshop | https://www.padelproshop.com | Tienda especializada | ? |
-| 6 | StreetPadel | https://www.streetpadel.com | Tienda especializada | ? |
-| 7 | Pádel Ibérico | https://www.padeliberico.es | Tienda especializada | ? |
-| 8 | M1 Padel | https://www.m1padel.com | Tienda especializada | ? |
-| 9 | Stock Padel | https://www.stockpadel.com/es/ | Tienda especializada (outlet) | ? |
-| 10 | Area Padel | https://areapadel.com | Tienda especializada | ? |
-| 11 | Keepadel | https://keepadel.com/es/ | Tienda especializada | ? |
+| 1 | Padel Nuestro | https://www.padelnuestro.com | Tienda especializada | Magento (sitemap_product.xml) |
+| 2 | Zona de Padel | https://www.zonadepadel.es | Tienda especializada | PrestaShop |
+| 3 | Time2Padel | https://www.time2padel.com/es/ | Tienda especializada | 403 antibot |
+| 4 | Padel Market | https://www.padelmarket.com | Tienda especializada | Shopify ✅ activa |
+| 5 | Padel Proshop | https://www.padelproshop.com | Tienda especializada | Shopify ✅ activa |
+| 6 | StreetPadel | https://www.streetpadel.com | Tienda especializada | Shopify ✅ activa |
+| 7 | Pádel Ibérico | https://www.padeliberico.es | Tienda especializada | 403 antibot |
+| 8 | M1 Padel | https://www.m1padel.com | Tienda especializada | PrestaShop |
+| 9 | Stock Padel | https://www.stockpadel.com/es/ | Tienda especializada (outlet) | PrestaShop |
+| 10 | Area Padel | https://areapadel.com | Tienda especializada | PrestaShop |
+| 11 | Keepadel | https://keepadel.com/es/ | Tienda especializada | PrestaShop (JSON-LD) |
 | 12 | Padel Directo | (verificar) | Tienda especializada | ? |
-| 13 | Decathlon (sección pádel) | https://www.decathlon.es | Gran superficie | ? |
-| 14 | El Corte Inglés (pádel) | https://www.elcorteingles.es | Gran superficie | ? |
-| 15 | Bullpadel (oficial/outlet) | https://www.bullpadel.com | Marca | ? |
-| 16 | NOX (oficial/outlet) | https://www.noxsport.com | Marca | ? |
+| 13 | Decathlon (sección pádel) | https://www.decathlon.es | Gran superficie | 403 antibot |
+| 14 | El Corte Inglés (pádel) | https://www.elcorteingles.es | Gran superficie | 403 antibot |
+| 15 | Bullpadel (oficial/outlet) | https://www.bullpadel.com | Marca | 403 antibot |
+| 16 | NOX (oficial/outlet) | https://www.noxsport.com | Marca | Shopify ✅ activa |
 | 17 | Siux (oficial) | (verificar) | Marca | ? |
 | 18 | Adidas Padel | (verificar) | Marca | ? |
 | 19 | Head Padel | (verificar) | Marca | ? |
