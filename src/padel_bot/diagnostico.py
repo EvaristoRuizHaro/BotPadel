@@ -18,7 +18,7 @@ from padel_bot.config import Config, Filtros, cargar_config
 from padel_bot.detector import descuento_pct
 from padel_bot.http import ClienteHttp
 from padel_bot.models import ProductoNormalizado
-from padel_bot.normalizar import normalizar_texto
+from padel_bot.normalizar import es_ropa_de_hombre, normalizar_texto
 
 
 def motivo_descarte(p: ProductoNormalizado, f: Filtros) -> str:
@@ -29,6 +29,8 @@ def motivo_descarte(p: ProductoNormalizado, f: Filtros) -> str:
         return "categoría"
     if f.marcas and normalizar_texto(p.marca) not in {normalizar_texto(m) for m in f.marcas}:
         return f"marca ({p.marca or '?'})"
+    if f.genero_ropa == "hombre" and p.categoria == "ropa" and not es_ropa_de_hombre(p.nombre):
+        return "mujer/niño"
     if f.precio_max is not None and p.precio > f.precio_max:
         return "precio > máx."
     if descuento_pct(p.precio, p.precio_original) < f.descuento_min_pct:

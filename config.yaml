@@ -9,6 +9,7 @@ filtros:
   bajada_min_pct: 5                       # regla "ha bajado desde la última revisión"
   bajada_historica_min_pct: 10            # regla "bajada real" frente al mínimo propio
   diferencia_min_eur_entre_tiendas: 15    # regla "mejor precio entre tiendas" (mismo EAN)
+  genero_ropa: hombre                     # ropa solo de hombre (descarta mujer y niño); quitar = toda
 
 seguimiento:            # productos concretos que quiero vigilar (ignoran los filtros)
   - "Nox AT10"

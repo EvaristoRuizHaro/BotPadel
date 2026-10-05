@@ -24,6 +24,7 @@ class Filtros(BaseModel):
     bajada_min_pct: float = 5
     bajada_historica_min_pct: float = 10
     diferencia_min_eur_entre_tiendas: Decimal = Decimal(15)
+    genero_ropa: Literal["hombre"] | None = None  # "hombre": descarta ropa de mujer y niño
 
 
 class Notificaciones(BaseModel):

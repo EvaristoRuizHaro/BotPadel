@@ -6,7 +6,7 @@ from decimal import Decimal
 
 from padel_bot.config import Filtros
 from padel_bot.models import EstadoPrevio, Motivo, ProductoNormalizado
-from padel_bot.normalizar import normalizar_texto
+from padel_bot.normalizar import es_ropa_de_hombre, normalizar_texto
 
 
 def pasa_filtros(p: ProductoNormalizado, filtros: Filtros) -> bool:
@@ -19,6 +19,12 @@ def pasa_filtros(p: ProductoNormalizado, filtros: Filtros) -> bool:
         marcas = {normalizar_texto(m) for m in filtros.marcas}
         if normalizar_texto(p.marca) not in marcas:
             return False
+    if (
+        filtros.genero_ropa == "hombre"
+        and p.categoria == "ropa"
+        and not es_ropa_de_hombre(p.nombre)
+    ):
+        return False
     return not (filtros.precio_max is not None and p.precio > filtros.precio_max)
 
 

@@ -174,6 +174,59 @@ def detectar_categoria(*textos: str | None) -> str | None:
     return None
 
 
+# Palabras que indican ropa de mujer o de niño (sin tildes, como las deja normalizar_texto)
+NO_HOMBRE = frozenset(
+    {
+        # mujer
+        "mujer",
+        "mujeres",
+        "woman",
+        "women",
+        "womens",
+        "w",
+        "femenino",
+        "femenina",
+        "chica",
+        "chicas",
+        "lady",
+        "ladies",
+        "girl",
+        "girls",
+        # niño
+        "nina",
+        "ninas",
+        "nino",
+        "ninos",
+        "junior",
+        "jr",
+        "kid",
+        "kids",
+        "infantil",
+        "boy",
+        "boys",
+        "child",
+        "children",
+        "baby",
+        # prendas de mujer aunque no lo digan
+        "sujetador",
+        "falda",
+        "faldas",
+        "skort",
+        "skirt",
+        "vestido",
+        "vestidos",
+        "dress",
+        "legging",
+        "leggings",
+    }
+)
+
+
+def es_ropa_de_hombre(nombre: str) -> bool:
+    """False si el nombre indica mujer o niño. Lo unisex o sin indicar cuenta como hombre."""
+    return not any(t in NO_HOMBRE for t in tokens(nombre))
+
+
 def coincide_seguimiento(nombre: str, termino: str) -> bool:
     """True si todas las palabras del término aparecen en el nombre del producto."""
     toks_nombre = set(tokens(nombre))
