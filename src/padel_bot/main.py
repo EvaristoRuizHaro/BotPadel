@@ -13,6 +13,7 @@ import argparse
 import asyncio
 import logging
 import os
+import sys
 from datetime import UTC, datetime, timedelta
 
 import httpx
@@ -60,15 +61,19 @@ def procesar_productos(
         if not debe_avisar(p.precio, db.ultimo_aviso(producto_id), motivos):
             continue
 
-        referencia = (
-            previo.minimo_historico if Motivo.BAJADA_HISTORICA in motivos else p.precio_original
-        )
+        if Motivo.BAJADA_HISTORICA in motivos:
+            referencia = previo.minimo_historico
+        elif Motivo.BAJADA_PRECIO in motivos:
+            referencia = previo.ultimo_precio
+        else:
+            referencia = p.precio_original
         ofertas.append(
             Oferta(
                 producto_id=producto_id,
                 producto=p,
                 motivos=motivos,
                 minimo_previo=previo.minimo_historico,
+                precio_anterior=previo.ultimo_precio,
                 siguiente_precio_otra_tienda=min(otros) if otros else None,
                 nombre_tienda=nombre_tienda,
                 descuento_pct=descuento_pct(p.precio, referencia),
@@ -120,6 +125,7 @@ async def ejecutar(config: Config, solo_tienda: str | None = None, dry_run: bool
             resultados = await asyncio.gather(*(_scrapear(t, cliente) for t in tiendas))
 
             total_avisos = 0
+            pendientes = 0
             for tienda, resultado in resultados:
                 if isinstance(resultado, Exception):
                     log.error("[%s] Error: %r", tienda.nombre, resultado)
@@ -131,6 +137,11 @@ async def ejecutar(config: Config, solo_tienda: str | None = None, dry_run: bool
                 log.info("[%s] %d productos", tienda.nombre, len(productos))
 
                 for oferta in procesar_productos(productos, db, config, ahora, tienda.titulo):
+                    # Tope por ejecución para no saturar el chat (sobre todo la primera vez).
+                    # Lo que no se envía no se registra, así que llegará en la siguiente.
+                    if total_avisos >= s.max_avisos_por_ejecucion:
+                        pendientes += 1
+                        continue
                     await notificador.enviar(formatear_oferta(oferta))
                     if not dry_run:
                         db.registrar_aviso(oferta, ahora)
@@ -142,11 +153,14 @@ async def ejecutar(config: Config, solo_tienda: str | None = None, dry_run: bool
                         f"⚠️ {tienda.titulo} lleva {racha} ejecuciones seguidas sin productos. "
                         "Puede que haya cambiado la web o que nos esté bloqueando."
                     )
-    log.info("Avisos enviados: %d", total_avisos)
+    log.info("Avisos enviados: %d · pendientes para la próxima: %d", total_avisos, pendientes)
     return total_avisos
 
 
 async def enviar_resumen(config: Config, dry_run: bool = False) -> None:
+    if not config.notificaciones.resumen_diario:
+        log.info("Resumen diario desactivado en config.yaml")
+        return
     desde = datetime.now(UTC) - timedelta(hours=24)
     with BaseDatos(config.scraping.ruta_db) as db:
         avisos = db.avisos_desde(desde)
@@ -162,6 +176,8 @@ def cli() -> None:
     parser.add_argument("--dry-run", action="store_true", help="No envía ni registra avisos")
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
+    if hasattr(sys.stdout, "reconfigure"):  # emojis en la consola de Windows
+        sys.stdout.reconfigure(encoding="utf-8")
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,

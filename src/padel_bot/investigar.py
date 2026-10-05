@@ -7,7 +7,7 @@ Para cada tienda de config.yaml comprueba:
 - Huellas en el HTML de la portada (PrestaShop, Magento, Salesforce...)
 - JSON-LD Product y sitemaps declarados en robots.txt
 
-Uso:  python -m padel_bot.investigar [--tienda nombre] > investigacion.md
+Uso:  python -m padel_bot.investigar [--tienda nombre]   (escribe investigacion.md)
 """
 
 from __future__ import annotations
@@ -15,7 +15,9 @@ from __future__ import annotations
 import argparse
 import asyncio
 import re
+import sys
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import httpx
 
@@ -116,14 +118,21 @@ async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="config.yaml")
     parser.add_argument("--tienda")
+    parser.add_argument("--salida", default="investigacion.md")
     args = parser.parse_args()
     config = cargar_config(args.config)
     tiendas = [t for t in config.tiendas if not args.tienda or t.nombre == args.tienda]
     s = config.scraping
     async with ClienteHttp(s.user_agent, s.delay_segundos, s.timeout_segundos) as cliente:
         informes = await asyncio.gather(*(investigar_tienda(t, cliente) for t in tiendas))
-    print(a_markdown(list(informes)))
+    tabla = a_markdown(list(informes))
+    # Se escribe en UTF-8 a propósito: en Windows, "> archivo" usa cp1252 y falla con los emojis
+    Path(args.salida).write_text(tabla + "\n", encoding="utf-8")
+    print(tabla)
+    print(f"\nGuardado en {args.salida}")
 
 
 if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     asyncio.run(main())
