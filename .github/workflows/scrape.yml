@@ -2,8 +2,9 @@ name: Scrape ofertas
 
 on:
   schedule:
-    - cron: "17 */8 * * *"   # cada 8 h (minuto 17 para evitar picos de GitHub)
-    - cron: "47 18 * * *"    # resumen diario (~20:47 en Madrid en horario de verano)
+    # Dos revisiones al día. GitHub usa UTC: 7:13 y 18:13 UTC = 9:13 y 20:13 en Madrid
+    # en horario de verano (8:13 y 19:13 en invierno).
+    - cron: "13 7,18 * * *"
   workflow_dispatch:
     inputs:
       comando:
@@ -44,11 +45,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          if [ "${{ github.event.schedule }}" = "47 18 * * *" ]; then
-            python -m padel_bot.main resumen
-          else
-            python -m padel_bot.main ${{ inputs.comando || 'scrape' }}
-          fi
+          python -m padel_bot.main ${{ inputs.comando || 'scrape' }}
 
       - name: Guardar base de datos (rama data)
         if: always()
