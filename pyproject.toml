@@ -1,0 +1,41 @@
+[project]
+name = "padel-bot"
+version = "0.1.0"
+description = "Bot que detecta ofertas reales de pádel en tiendas españolas y avisa por Telegram"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.27",
+    "selectolax>=0.3.21",
+    "pydantic>=2.7",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+playwright = ["playwright>=1.45"]
+
+[project.scripts]
+padel-bot = "padel_bot.main:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/padel_bot"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]  # caracteres como "−" o "€" son intencionados
+
+[tool.ruff.lint.isort]
+known-first-party = ["padel_bot"]

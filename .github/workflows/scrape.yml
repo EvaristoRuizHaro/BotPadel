@@ -1,0 +1,71 @@
+name: Scrape ofertas
+
+on:
+  schedule:
+    - cron: "17 */8 * * *"   # cada 8 h (minuto 17 para evitar picos de GitHub)
+    - cron: "47 18 * * *"    # resumen diario (~20:47 en Madrid en horario de verano)
+  workflow_dispatch:
+    inputs:
+      comando:
+        description: "scrape o resumen"
+        default: scrape
+
+permissions:
+  contents: write   # para guardar la base de datos en la rama "data"
+
+concurrency:
+  group: padel-bot
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install .
+
+      - name: Recuperar base de datos (rama data)
+        run: |
+          mkdir -p data
+          if git ls-remote --exit-code --heads origin data >/dev/null; then
+            git fetch --depth=1 origin data
+            git show FETCH_HEAD:padel.db > data/padel.db
+          fi
+
+      - name: Ejecutar
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ "${{ github.event.schedule }}" = "47 18 * * *" ]; then
+            python -m padel_bot.main resumen
+          else
+            python -m padel_bot.main ${{ inputs.comando || 'scrape' }}
+          fi
+
+      - name: Guardar base de datos (rama data)
+        if: always()
+        run: |
+          [ -f data/padel.db ] || exit 0
+          git config user.name "padel-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp data/padel.db /tmp/padel.db
+          if git ls-remote --exit-code --heads origin data >/dev/null; then
+            git fetch --depth=1 origin data
+            git worktree add /tmp/rama-data FETCH_HEAD
+            cd /tmp/rama-data && git checkout -B data
+          else
+            git worktree add --orphan -b data /tmp/rama-data
+            cd /tmp/rama-data
+          fi
+          cp /tmp/padel.db padel.db
+          git add padel.db
+          git commit -m "datos $(date -u +%Y-%m-%dT%H:%MZ)" || exit 0
+          git push origin data

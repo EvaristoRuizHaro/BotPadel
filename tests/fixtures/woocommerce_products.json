@@ -1,0 +1,23 @@
+[
+  {
+    "id": 501,
+    "name": "Pala NOX AT10 Genius 18K Alum 2026 &#8211; Agust&iacute;n Tapia",
+    "permalink": "https://tienda-woo.example/producto/nox-at10-genius-18k/",
+    "sku": "8436043712345",
+    "prices": {"price": "17995", "regular_price": "27995", "sale_price": "17995", "currency_code": "EUR", "currency_minor_unit": 2},
+    "images": [{"src": "https://tienda-woo.example/at10.jpg"}],
+    "categories": [{"name": "Palas de pádel"}],
+    "brands": [{"name": "NOX"}],
+    "is_in_stock": true
+  },
+  {
+    "id": 502,
+    "name": "Paletero Siux Fusion Pro",
+    "permalink": "https://tienda-woo.example/producto/paletero-siux/",
+    "sku": "SX-PAL-01",
+    "prices": {"price": "4995", "regular_price": "4995", "sale_price": "4995", "currency_code": "EUR", "currency_minor_unit": 2},
+    "images": [],
+    "categories": [{"name": "Paleteros"}],
+    "is_in_stock": false
+  }
+]

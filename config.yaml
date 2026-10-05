@@ -1,0 +1,62 @@
+# Configuración del bot de ofertas de pádel.
+# Las variables ${VAR} se sustituyen por variables de entorno al cargar.
+
+filtros:
+  categorias: [pala, zapatilla]          # vacío = todas
+  marcas: [Bullpadel, Nox, Adidas, Siux, Babolat, Head]   # vacío = todas
+  precio_max: 200
+  descuento_min_pct: 30                   # regla "descuento alto" (precio tachado)
+  bajada_historica_min_pct: 10            # regla "bajada real" frente al mínimo propio
+  diferencia_min_eur_entre_tiendas: 15    # regla "mejor precio entre tiendas" (mismo EAN)
+
+seguimiento:            # productos concretos que quiero vigilar (ignoran los filtros)
+  - "Nox AT10"
+  - "Bullpadel Vertex 04"
+
+notificaciones:
+  telegram_chat_id: ${TELEGRAM_CHAT_ID}
+  resumen_diario: true
+
+scraping:
+  user_agent: "PadelOfertasBot/0.1 (+mailto:ruizristo@gmail.com)"
+  delay_segundos: 2.5          # mínimo entre peticiones al mismo dominio
+  timeout_segundos: 20
+  ruta_db: data/padel.db
+  max_ejecuciones_vacias: 3    # aviso si una tienda devuelve 0 productos N veces seguidas
+
+# Fase 1: verificar plataforma de cada tienda (python -m padel_bot.investigar)
+# y cambiar "adaptador: pendiente" + "activa: true" cuando esté comprobada.
+# Adaptadores: shopify | woocommerce | jsonld | html | playwright | pendiente
+tiendas:
+  - {nombre: padelnuestro, nombre_visible: Padel Nuestro, adaptador: pendiente, activa: false, url_base: "https://www.padelnuestro.com"}
+  - {nombre: zonadepadel, nombre_visible: Zona de Padel, adaptador: pendiente, activa: false, url_base: "https://www.zonadepadel.es"}
+  - {nombre: time2padel, nombre_visible: Time2Padel, adaptador: pendiente, activa: false, url_base: "https://www.time2padel.com/es"}
+  - {nombre: padelmarket, nombre_visible: Padel Market, adaptador: pendiente, activa: false, url_base: "https://www.padelmarket.com"}
+  - {nombre: padelproshop, nombre_visible: Padel Proshop, adaptador: pendiente, activa: false, url_base: "https://www.padelproshop.com"}
+  - {nombre: streetpadel, nombre_visible: StreetPadel, adaptador: pendiente, activa: false, url_base: "https://www.streetpadel.com"}
+  - {nombre: padeliberico, nombre_visible: Pádel Ibérico, adaptador: pendiente, activa: false, url_base: "https://www.padeliberico.es"}
+  - {nombre: m1padel, nombre_visible: M1 Padel, adaptador: pendiente, activa: false, url_base: "https://www.m1padel.com"}
+  - {nombre: stockpadel, nombre_visible: Stock Padel, adaptador: pendiente, activa: false, url_base: "https://www.stockpadel.com/es"}
+  - {nombre: areapadel, nombre_visible: Area Padel, adaptador: pendiente, activa: false, url_base: "https://areapadel.com"}
+  - {nombre: keepadel, nombre_visible: Keepadel, adaptador: pendiente, activa: false, url_base: "https://keepadel.com/es"}
+  - {nombre: decathlon, nombre_visible: Decathlon, adaptador: pendiente, activa: false, url_base: "https://www.decathlon.es"}
+  - {nombre: elcorteingles, nombre_visible: El Corte Inglés, adaptador: pendiente, activa: false, url_base: "https://www.elcorteingles.es"}
+  - {nombre: bullpadel, nombre_visible: Bullpadel, adaptador: pendiente, activa: false, url_base: "https://www.bullpadel.com"}
+  - {nombre: nox, nombre_visible: NOX, adaptador: pendiente, activa: false, url_base: "https://www.noxsport.com"}
+  # Pendientes de URL: Padel Directo, Siux, Adidas Padel, Head Padel, Babolat Padel
+
+  # Ejemplos de configuración por tipo de adaptador:
+  # - nombre: ejemplo_shopify
+  #   adaptador: shopify
+  #   url_base: https://tienda.com
+  #   coleccion: outlet            # opcional: /collections/outlet/products.json
+  # - nombre: ejemplo_woo
+  #   adaptador: woocommerce
+  #   url_base: https://tienda.com
+  #   solo_ofertas: true           # ?on_sale=true
+  # - nombre: ejemplo_jsonld
+  #   adaptador: jsonld
+  #   url_base: https://tienda.com
+  #   sitemap: https://tienda.com/sitemap_products.xml
+  #   filtro_urls: "pala"          # opcional: solo URLs que contengan este texto
+  #   max_productos: 150

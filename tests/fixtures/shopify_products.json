@@ -1,0 +1,41 @@
+{
+  "products": [
+    {
+      "id": 7001,
+      "title": "Pala Bullpadel Vertex 04 2026",
+      "handle": "pala-bullpadel-vertex-04-2026",
+      "vendor": "BULLPADEL",
+      "product_type": "Palas",
+      "tags": ["outlet", "palas"],
+      "images": [{"src": "https://cdn.shopify.com/vertex04.jpg"}],
+      "variants": [
+        {"id": 1, "price": "189.95", "compare_at_price": "269.95", "available": true, "barcode": "8435541234567"}
+      ]
+    },
+    {
+      "id": 7002,
+      "title": "Zapatillas Asics Gel-Resolution 9 Padel",
+      "handle": "asics-gel-resolution-9",
+      "vendor": "Asics",
+      "product_type": "",
+      "tags": "zapatillas, hombre",
+      "images": [],
+      "variants": [
+        {"id": 2, "price": "99.00", "compare_at_price": "140.00", "available": false, "barcode": ""},
+        {"id": 3, "price": "105.00", "compare_at_price": "140.00", "available": true, "barcode": null}
+      ]
+    },
+    {
+      "id": 7003,
+      "title": "Overgrip Nox Pro x3",
+      "handle": "overgrip-nox",
+      "vendor": "Nox",
+      "product_type": "Accesorios",
+      "tags": [],
+      "images": [],
+      "variants": [
+        {"id": 4, "price": "6.95", "compare_at_price": null, "available": true, "barcode": "123"}
+      ]
+    }
+  ]
+}
