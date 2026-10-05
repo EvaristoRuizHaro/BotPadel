@@ -5,6 +5,8 @@ on:
     # Dos revisiones al día. GitHub usa UTC: 7:13 y 18:13 UTC = 9:13 y 20:13 en Madrid
     # en horario de verano (8:13 y 19:13 en invierno).
     - cron: "13 7,18 * * *"
+  push:
+    branches: [lanzar]   # empujar a la rama "lanzar" lanza una revisión al momento
   workflow_dispatch:
     inputs:
       comando:
