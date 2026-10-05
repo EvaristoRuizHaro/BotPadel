@@ -41,27 +41,56 @@ MARCAS: dict[str, str] = {
     "tecnifibre": "Tecnifibre",
 }
 
-# Orden irrelevante: se elige la palabra clave que aparece antes en el texto.
+# Dentro de un texto gana la palabra clave que aparece antes ("Protector pala" → accesorio).
 CATEGORIAS: dict[str, tuple[str, ...]] = {
     "pala": ("pala", "palas", "racket", "rackets", "raqueta"),
     "zapatilla": ("zapatilla", "zapatillas", "shoes", "shoe", "calzado"),
     "paletero": ("paletero", "paleteros", "mochila", "mochilas", "bolsa", "bag", "trolley"),
     "pelotas": ("pelota", "pelotas", "balls", "bote"),
     "ropa": (
+        "ropa",
+        "textil",
+        "apparel",
+        "clothing",
         "camiseta",
+        "camisetas",
+        "t-shirt",
+        "tshirt",
+        "tee",
         "polo",
+        "polos",
         "pantalon",
         "pantalones",
-        "falda",
-        "sudadera",
+        "bermuda",
+        "bermudas",
         "short",
         "shorts",
+        "falda",
+        "faldas",
+        "skort",
         "vestido",
+        "vestidos",
+        "dress",
+        "skirt",
+        "sudadera",
+        "sudaderas",
+        "hoodie",
+        "sweatshirt",
         "chaqueta",
-        "calcetines",
-        "calcetin",
+        "chaquetas",
+        "cortavientos",
+        "jacket",
+        "chandal",
+        "chandals",
         "mallas",
+        "leggings",
         "top",
+        "tops",
+        "sujetador",
+        "tirantes",
+        "calcetin",
+        "calcetines",
+        "socks",
     ),
     "accesorio": (
         "overgrip",
@@ -122,7 +151,12 @@ def _categoria_en(texto: str | None) -> str | None:
 
 
 def detectar_categoria(*textos: str | None) -> str | None:
-    """Prueba los textos en orden (tipo/categoría de la tienda primero, luego el nombre)."""
+    """Prueba los textos en orden y devuelve la primera categoría encontrada.
+
+    Los adaptadores pasan primero el NOMBRE del producto (lo más fiable: "Paletero Nox...")
+    y después la categoría/etiquetas de la tienda, que a veces son genéricas
+    ("Palas y paleteros").
+    """
     for texto in textos:
         if categoria := _categoria_en(texto):
             return categoria

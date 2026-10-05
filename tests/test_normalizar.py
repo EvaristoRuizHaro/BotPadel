@@ -38,6 +38,11 @@ def test_detectar_marca(textos: tuple[str | None, ...], esperado: str | None) ->
         ((None, "Bote 3 pelotas Head Pro"), "pelotas"),
         ((None, "Paletero Nox AT10"), "paletero"),
         ((None, "Camiseta técnica"), "ropa"),
+        (("Paletero Nox AT10 Team", "Palas y paleteros"), "paletero"),
+        (("Nox AT10 Genius 18K", "Palas"), "pala"),
+        (("Falda Adidas Club", "Textil mujer"), "ropa"),
+        (("Polo Bullpadel Liria", None), "ropa"),
+        (("Sudadera Siux Hoodie", None), "ropa"),
         ((None, "Algo raro"), None),
     ],
 )

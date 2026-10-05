@@ -97,7 +97,7 @@ def _producto_desde_nodo(nodo: dict[str, Any], tienda: str, url: str) -> Product
         id_externo=str(nodo.get("sku") or nodo.get("productID") or url),
         nombre=nombre,
         marca=detectar_marca(_texto(nodo.get("brand")), nombre),
-        categoria=detectar_categoria(_texto(nodo.get("category")), nombre),
+        categoria=detectar_categoria(nombre, _texto(nodo.get("category"))),
         url=nodo.get("url") or url,
         imagen=imagen,
         precio=precio,

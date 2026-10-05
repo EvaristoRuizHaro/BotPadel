@@ -2,7 +2,7 @@
 # Las variables ${VAR} se sustituyen por variables de entorno al cargar.
 
 filtros:
-  categorias: [pala, zapatilla]          # vacío = todas
+  categorias: [pala, zapatilla, ropa]    # vacío = todas
   marcas: [Bullpadel, Nox, Adidas, Siux, Babolat, Head]   # vacío = todas
   precio_max: 200
   descuento_min_pct: 30                   # regla "descuento alto" (precio tachado)

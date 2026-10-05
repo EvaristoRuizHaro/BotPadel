@@ -42,7 +42,7 @@ def parsear_productos(datos: list[dict[str, Any]], tienda: str) -> list[Producto
                 id_externo=str(prod.get("id")),
                 nombre=nombre,
                 marca=detectar_marca(marcas or None, nombre),
-                categoria=detectar_categoria(categorias, nombre),
+                categoria=detectar_categoria(nombre, categorias),
                 url=prod.get("permalink", ""),
                 imagen=imagenes[0].get("src") if imagenes else None,
                 precio=precio,

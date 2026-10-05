@@ -54,7 +54,7 @@ def parsear_productos(
                 nombre=limpiar_nombre(prod.get("title", "")),
                 marca=detectar_marca(prod.get("vendor"), prod.get("title")),
                 categoria=detectar_categoria(
-                    prod.get("product_type"), " ".join(tags), prod.get("title")
+                    prod.get("title"), prod.get("product_type"), " ".join(tags)
                 ),
                 url=f"{url_base}/products/{prod['handle']}",
                 imagen=imagenes[0].get("src") if imagenes else None,
