@@ -165,3 +165,4 @@ Resumen diario: top 10 ofertas agrupadas por categoría.
 - Cada adaptador con su test usando el fixture (sin peticiones reales en los tests).
 - Cambios pequeños e incrementales; no reescribir módulos enteros sin pedirlo.
 - Tipado completo y `ruff` para formato.
+- Cada push a `main` lanza automáticamente el workflow de scrape (además de las 9:13 y 20:13). Para lanzarlo sin cambios: empujar a la rama `lanzar`.

@@ -6,7 +6,9 @@ on:
     # en horario de verano (8:13 y 19:13 en invierno).
     - cron: "13 7,18 * * *"
   push:
-    branches: [lanzar]   # empujar a la rama "lanzar" lanza una revisión al momento
+    # Cada push a main (o a "lanzar") lanza una revisión al momento.
+    # La rama "data" queda fuera: si no, el propio bot se relanzaría al guardar la base.
+    branches: [main, lanzar]
   workflow_dispatch:
     inputs:
       comando:
