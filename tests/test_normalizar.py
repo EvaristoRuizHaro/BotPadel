@@ -43,6 +43,8 @@ def test_detectar_marca(textos: tuple[str | None, ...], esperado: str | None) ->
         (("Falda Adidas Club", "Textil mujer"), "ropa"),
         (("Polo Bullpadel Liria", None), "ropa"),
         (("Sudadera Siux Hoodie", None), "ropa"),
+        (("Pala Pickleball Luxury Tempo", "Palas"), "otros"),
+        (("Pala beach tennis ML10 PRO CUP 2025", None), "otros"),
         ((None, "Algo raro"), None),
     ],
 )

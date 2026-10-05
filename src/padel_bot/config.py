@@ -44,6 +44,7 @@ class Scraping(BaseModel):
     ruta_db: str = "data/padel.db"
     max_ejecuciones_vacias: int = 3
     max_avisos_por_ejecucion: int = 40
+    avisos_iniciales_por_categoria: int = 10
 
 
 class ConfigTienda(BaseModel):

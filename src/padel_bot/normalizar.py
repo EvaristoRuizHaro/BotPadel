@@ -139,8 +139,14 @@ def detectar_marca(*textos: str | None) -> str | None:
     return None
 
 
+# Productos de otros deportes que comparten palabras ("Pala Pickleball", "Pala beach tennis")
+OTROS_DEPORTES = ("pickleball", "beach", "playa", "squash", "badminton")
+
+
 def _categoria_en(texto: str | None) -> str | None:
     toks = tokens(texto)
+    if any(t in OTROS_DEPORTES for t in toks):
+        return "otros"
     mejor: tuple[int, str] | None = None
     for categoria, claves in CATEGORIAS.items():
         for i, tok in enumerate(toks):

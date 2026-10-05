@@ -25,6 +25,7 @@ scraping:
   ruta_db: data/padel.db
   max_ejecuciones_vacias: 3    # aviso si una tienda devuelve 0 productos N veces seguidas
   max_avisos_por_ejecucion: 40 # el resto se envía en la siguiente revisión
+  avisos_iniciales_por_categoria: 10  # 1ª revisión de una tienda: top N por categoría; el resto se da por visto
 
 # Fase 1: verificar plataforma de cada tienda (python -m padel_bot.investigar)
 # y cambiar "adaptador: pendiente" + "activa: true" cuando esté comprobada.
@@ -33,7 +34,7 @@ tiendas:
   # --- Activas (Shopify: /products.json) ---
   - {nombre: padelmarket, nombre_visible: Padel Market, adaptador: shopify, activa: true, url_base: "https://padelmarket.com"}
   - {nombre: padelproshop, nombre_visible: Padel Proshop, adaptador: shopify, activa: true, url_base: "https://padelproshop.com"}
-  - {nombre: streetpadel, nombre_visible: StreetPadel, adaptador: shopify, activa: true, url_base: "https://www.streetpadel.com"}
+  - {nombre: streetpadel, nombre_visible: StreetPadel, adaptador: shopify, activa: true, url_base: "https://www.streetpadel.com", max_paginas: 40}  # +5000 productos
   - {nombre: nox, nombre_visible: NOX, adaptador: shopify, activa: true, url_base: "https://noxsport.com"}
 
   # --- Magento / PrestaShop: candidatas a adaptador jsonld (fase 4) ---

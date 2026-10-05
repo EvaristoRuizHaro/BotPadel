@@ -233,6 +233,14 @@ class BaseDatos:
         )
         self.con.commit()
 
+    def tiene_historial(self, tienda: str) -> bool:
+        """True si la tienda ya se revisó alguna vez con éxito (antes de esta ejecución)."""
+        fila = self.con.execute(
+            "SELECT 1 FROM ejecuciones_tienda WHERE tienda = ? AND num_productos > 0 LIMIT 1",
+            (tienda,),
+        ).fetchone()
+        return fila is not None
+
     def ejecuciones_vacias_seguidas(self, tienda: str) -> int:
         """Cuántas de las últimas ejecuciones consecutivas devolvieron 0 productos."""
         filas = self.con.execute(

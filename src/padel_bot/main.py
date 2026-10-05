@@ -32,6 +32,7 @@ from padel_bot.notificador import (
     formatear_oferta,
     formatear_resumen,
 )
+from padel_bot.seleccion import repartir, seleccion_inicial
 
 log = logging.getLogger("padel_bot")
 
@@ -124,9 +125,10 @@ async def ejecutar(config: Config, solo_tienda: str | None = None, dry_run: bool
             notificador = _crear_notificador(config, http_telegram, dry_run)
             resultados = await asyncio.gather(*(_scrapear(t, cliente) for t in tiendas))
 
-            total_avisos = 0
-            pendientes = 0
+            ofertas_iniciales: list[Oferta] = []  # tiendas revisadas por primera vez
+            ofertas_normales: list[Oferta] = []
             for tienda, resultado in resultados:
+                primera_vez = not db.tiene_historial(tienda.nombre)
                 if isinstance(resultado, Exception):
                     log.error("[%s] Error: %r", tienda.nombre, resultado)
                     db.registrar_ejecucion(tienda.nombre, 0, repr(resultado), ahora)
@@ -136,16 +138,8 @@ async def ejecutar(config: Config, solo_tienda: str | None = None, dry_run: bool
                     db.registrar_ejecucion(tienda.nombre, len(productos), None, ahora)
                 log.info("[%s] %d productos", tienda.nombre, len(productos))
 
-                for oferta in procesar_productos(productos, db, config, ahora, tienda.titulo):
-                    # Tope por ejecución para no saturar el chat (sobre todo la primera vez).
-                    # Lo que no se envía no se registra, así que llegará en la siguiente.
-                    if total_avisos >= s.max_avisos_por_ejecucion:
-                        pendientes += 1
-                        continue
-                    await notificador.enviar(formatear_oferta(oferta))
-                    if not dry_run:
-                        db.registrar_aviso(oferta, ahora)
-                    total_avisos += 1
+                ofertas = procesar_productos(productos, db, config, ahora, tienda.titulo)
+                (ofertas_iniciales if primera_vez else ofertas_normales).extend(ofertas)
 
                 racha = db.ejecuciones_vacias_seguidas(tienda.nombre)
                 if racha == s.max_ejecuciones_vacias:  # avisa una sola vez por racha
@@ -153,8 +147,31 @@ async def ejecutar(config: Config, solo_tienda: str | None = None, dry_run: bool
                         f"⚠️ {tienda.titulo} lleva {racha} ejecuciones seguidas sin productos. "
                         "Puede que haya cambiado la web o que nos esté bloqueando."
                     )
-    log.info("Avisos enviados: %d · pendientes para la próxima: %d", total_avisos, pendientes)
-    return total_avisos
+
+            # Primera revisión: las mejores de cada categoría; el resto se da por visto
+            enviar, dar_por_vistas = seleccion_inicial(
+                ofertas_iniciales, s.avisos_iniciales_por_categoria
+            )
+            # Revisiones normales: reparto por categorías; lo que no cabe, a la siguiente
+            hueco = max(s.max_avisos_por_ejecucion - len(enviar), 0)
+            normales, pendientes = repartir(ofertas_normales, hueco)
+            enviar += normales
+
+            for oferta in enviar:
+                await notificador.enviar(formatear_oferta(oferta))
+                if not dry_run:
+                    db.registrar_aviso(oferta, ahora)
+            if not dry_run:
+                for oferta in dar_por_vistas:
+                    db.registrar_aviso(oferta, ahora)
+
+    log.info(
+        "Avisos enviados: %d · dados por vistos (1ª revisión): %d · pendientes: %d",
+        len(enviar),
+        len(dar_por_vistas),
+        len(pendientes),
+    )
+    return len(enviar)
 
 
 async def enviar_resumen(config: Config, dry_run: bool = False) -> None:
