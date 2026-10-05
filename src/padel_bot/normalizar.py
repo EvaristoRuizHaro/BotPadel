@@ -147,6 +147,11 @@ def _categoria_en(texto: str | None) -> str | None:
     toks = tokens(texto)
     if any(t in OTROS_DEPORTES for t in toks):
         return "otros"
+    # "Pack Bullpadel Vertex 04 + Paletero", "Pack dúo Nox...": los packs giran en torno a la pala
+    if any(t in ("pack", "tripack") for t in toks) and not any(
+        t in CATEGORIAS["zapatilla"] + CATEGORIAS["ropa"] + CATEGORIAS["pelotas"] for t in toks
+    ):
+        return "pala"
     mejor: tuple[int, str] | None = None
     for categoria, claves in CATEGORIAS.items():
         for i, tok in enumerate(toks):

@@ -36,6 +36,8 @@ from padel_bot.seleccion import repartir, seleccion_inicial
 
 log = logging.getLogger("padel_bot")
 
+CATEGORIAS_SIN_SEGUIMIENTO = {"paletero", "accesorio", "pelotas", "otros"}
+
 
 def procesar_productos(
     productos: list[ProductoNormalizado],
@@ -52,7 +54,10 @@ def procesar_productos(
         otros = db.precios_otras_tiendas(p.ean, p.tienda) if p.ean else []
         db.registrar_precio(producto_id, p, ahora)
 
-        en_seguimiento = any(coincide_seguimiento(p.nombre, t) for t in config.seguimiento)
+        # Lo vigilado ignora los filtros, pero no los paleteros/accesorios del mismo modelo
+        en_seguimiento = p.categoria not in CATEGORIAS_SIN_SEGUIMIENTO and any(
+            coincide_seguimiento(p.nombre, t) for t in config.seguimiento
+        )
         if not en_seguimiento and not pasa_filtros(p, config.filtros):
             continue
 
